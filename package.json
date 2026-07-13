@@ -17,15 +17,15 @@
     "test": "npm run verify && npm run test:layout"
   },
   "devDependencies": {
-    "@sveltejs/vite-plugin-svelte": "^4.0.0",
+    "@sveltejs/vite-plugin-svelte": "^6.2.4",
     "@tsconfig/svelte": "^5.0.4",
     "playwright-core": "^1.61.1",
     "svelte": "^5.15.0",
     "svelte-check": "^4.1.0",
     "tslib": "^2.8.1",
     "typescript": "^5.7.2",
-    "vite": "^5.4.11",
-    "vite-plugin-pwa": "^0.21.1"
+    "vite": "^7.3.6",
+    "vite-plugin-pwa": "^1.0.3"
   },
   "dependencies": {
     "pdf-lib": "^1.17.1"

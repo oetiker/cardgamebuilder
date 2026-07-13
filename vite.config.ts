@@ -2,7 +2,12 @@ import { defineConfig } from 'vite';
 import { svelte } from '@sveltejs/vite-plugin-svelte';
 import { VitePWA } from 'vite-plugin-pwa';
 
+// GitHub Pages serves a project site from /<repo>/, so the CI sets BASE_PATH.
+// Locally (dev/preview) it defaults to '/'.
+const base = process.env.BASE_PATH || '/';
+
 export default defineConfig({
+  base,
   plugins: [
     svelte(),
     VitePWA({
@@ -17,8 +22,9 @@ export default defineConfig({
         background_color: '#0f1424',
         display: 'standalone',
         orientation: 'any',
-        start_url: '/',
-        scope: '/',
+        id: base,
+        start_url: base,
+        scope: base,
         icons: [
           { src: 'icon-192.png', sizes: '192x192', type: 'image/png' },
           { src: 'icon-512.png', sizes: '512x512', type: 'image/png' },
