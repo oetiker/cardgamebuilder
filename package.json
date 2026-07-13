@@ -1,0 +1,27 @@
+{
+  "name": "cardgamebuilder",
+  "private": true,
+  "version": "0.1.0",
+  "type": "module",
+  "description": "A PWA to design card games and export print-ready PDFs, entirely in the browser.",
+  "scripts": {
+    "dev": "vite",
+    "build": "svelte-check --tsconfig ./tsconfig.json && vite build",
+    "build:fast": "vite build",
+    "preview": "vite preview",
+    "check": "svelte-check --tsconfig ./tsconfig.json"
+  },
+  "devDependencies": {
+    "@sveltejs/vite-plugin-svelte": "^4.0.0",
+    "@tsconfig/svelte": "^5.0.4",
+    "svelte": "^5.15.0",
+    "svelte-check": "^4.1.0",
+    "tslib": "^2.8.1",
+    "typescript": "^5.7.2",
+    "vite": "^5.4.11",
+    "vite-plugin-pwa": "^0.21.1"
+  },
+  "dependencies": {
+    "pdf-lib": "^1.17.1"
+  }
+}
