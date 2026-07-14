@@ -1,13 +1,17 @@
 <script lang="ts">
-  import { store, setOrder, generate, isGenerated, canGenerate, requiredSymbols, reshuffleCard, reshuffleAll } from '../lib/store.svelte';
+  import { store, setOrder, generate, isGenerated, canGenerate, requiredSymbols, reshuffleCard } from '../lib/store.svelte';
   import { DECK_SIZES } from '../lib/presets';
   import CardFace from './CardFace.svelte';
+  import CardControls from './CardControls.svelte';
 
   const need = $derived(requiredSymbols(store.deck.order));
   const have = $derived(store.deck.symbols.length);
   const generated = $derived(isGenerated());
 
   const selected = $derived(store.deck.cards.find((c) => c.id === store.ui.selectedCard) ?? null);
+
+  // How big the card previews are drawn on this screen (view-only, not printed).
+  let previewSize = $state(160);
 
   function pick(order: number) {
     setOrder(order);
@@ -42,17 +46,28 @@
         <button class="primary" onclick={generate}>{store.deck.cards.length ? 'Regenerate' : 'Generate'} deck</button>
       {:else}
         <span class="ok-text">✓ {store.deck.cards.length} cards ready · every pair shares one symbol</span>
-        <button onclick={reshuffleAll}>Shuffle all layouts</button>
         <button class="primary" onclick={() => (store.ui.view = 'print')}>Print / export →</button>
       {/if}
     </div>
   </section>
 
   {#if generated}
-    <section class="cards">
+    <section class="card-surface panel">
+      <div class="design-head">
+        <h2>Card design</h2>
+        <div class="field zoom">
+          <label for="pv">Preview size — {previewSize} px</label>
+          <input id="pv" type="range" min="110" max="300" step="10" bind:value={previewSize} />
+        </div>
+      </div>
+      <p class="hint">Change how each card looks and how its symbols are arranged. Updates live below.</p>
+      <CardControls />
+    </section>
+
+    <section class="cards" style="grid-template-columns: repeat(auto-fill, minmax({previewSize}px, 1fr))">
       {#each store.deck.cards as card, i (card.id)}
         <button class="thumb card-surface" onclick={() => (store.ui.selectedCard = card.id)} title="Card {i + 1}">
-          <CardFace {card} size={150} />
+          <CardFace {card} size={previewSize} />
           <span class="idx">{i + 1}</span>
         </button>
       {/each}
@@ -94,6 +109,10 @@
   .actions { display: flex; align-items: center; gap: 0.8rem; flex-wrap: wrap; margin-top: 1rem; }
   .warn-text { color: var(--warn); }
   .ok-text { color: var(--accent-2); }
+
+  .design-head { display: flex; align-items: flex-end; justify-content: space-between; gap: 1rem; flex-wrap: wrap; }
+  .field.zoom { display: flex; flex-direction: column; gap: 0.35rem; min-width: 200px; }
+  .field.zoom input { width: 100%; }
 
   .cards { display: grid; grid-template-columns: repeat(auto-fill, minmax(150px, 1fr)); gap: 0.8rem; justify-items: center; }
   .thumb { position: relative; padding: 0.5rem; background: var(--panel); }

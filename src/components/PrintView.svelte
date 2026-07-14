@@ -47,6 +47,11 @@
   <section class="card-surface panel controls">
     <h2>Print settings</h2>
 
+    <p class="hint">
+      These control how cards are arranged on the printed page. To change how each
+      card looks (size, symbols, colours), use the <strong>Deck</strong> tab.
+    </p>
+
     <div class="rows">
       <div class="field">
         <label for="pg">Paper</label>
@@ -54,12 +59,6 @@
           <option value="A4">A4</option>
           <option value="Letter">US Letter</option>
         </select>
-      </div>
-
-      <div class="field">
-        <label for="dia">Card size — {s.cardDiameterMm} mm</label>
-        <input id="dia" type="range" min="45" max="120" step="1" value={s.cardDiameterMm}
-          oninput={(e) => updateSettings({ cardDiameterMm: +(e.target as HTMLInputElement).value })} />
       </div>
 
       <div class="field">
@@ -75,38 +74,16 @@
       </div>
 
       <div class="field">
-        <label for="rot">Symbol rotation — ±{s.maxRotationDeg}°</label>
-        <input id="rot" type="range" min="0" max="180" step="5" value={s.maxRotationDeg}
-          oninput={(e) => updateSettings({ maxRotationDeg: +(e.target as HTMLInputElement).value })} />
-      </div>
-
-      <div class="field">
-        <label for="scl">Symbol size — {Math.round(s.symbolScale * 100)}%</label>
-        <input id="scl" type="range" min="0.6" max="1.4" step="0.05" value={s.symbolScale}
-          oninput={(e) => updateSettings({ symbolScale: +(e.target as HTMLInputElement).value })} />
-      </div>
-
-      <div class="field">
         <label for="q">Quality</label>
         <select id="q" value={s.dpi} onchange={(e) => updateSettings({ dpi: +(e.target as HTMLSelectElement).value })}>
           {#each qualities as q (q.dpi)}<option value={q.dpi}>{q.label}</option>{/each}
         </select>
       </div>
-
-      <div class="field">
-        <label for="bg">Card background</label>
-        <input id="bg" type="color" value={s.cardBg} oninput={(e) => updateSettings({ cardBg: (e.target as HTMLInputElement).value })} />
-      </div>
-
-      <div class="field checks">
-        <label><input type="checkbox" checked={s.showLabels} onchange={(e) => updateSettings({ showLabels: (e.target as HTMLInputElement).checked })} /> Show words</label>
-        <label><input type="checkbox" checked={s.cutLines} onchange={(e) => updateSettings({ cutLines: (e.target as HTMLInputElement).checked })} /> Cut outlines</label>
-      </div>
     </div>
 
     <div class="layout-note">
       {#if generated}
-        {store.deck.cards.length} cards → <strong>{grid.pageCount}</strong> page{grid.pageCount === 1 ? '' : 's'}
+        {store.deck.cards.length} cards ({s.cardDiameterMm} mm each) → <strong>{grid.pageCount}</strong> page{grid.pageCount === 1 ? '' : 's'}
         ({grid.cols}×{grid.rows} per page on {s.pageSize} — {PAGE_DIMS[s.pageSize].w}×{PAGE_DIMS[s.pageSize].h} mm)
       {:else}
         Generate the deck first to enable export.
@@ -138,12 +115,12 @@
   .wrap { display: grid; grid-template-columns: 1fr; gap: 1rem; }
   @media (min-width: 820px) { .wrap { grid-template-columns: 1.3fr 1fr; align-items: start; } }
   .panel { padding: 1.1rem 1.2rem; }
-  h2 { margin: 0 0 0.9rem; font-size: 1.25rem; }
+  h2 { margin: 0 0 0.5rem; font-size: 1.25rem; }
+  .hint { color: var(--muted); font-size: 0.9rem; margin: 0 0 1rem; }
+  .hint strong { color: var(--text); }
   .rows { display: grid; grid-template-columns: repeat(auto-fit, minmax(190px, 1fr)); gap: 0.9rem; }
   .field { display: flex; flex-direction: column; gap: 0.35rem; }
   .field input[type="range"] { width: 100%; }
-  .field.checks { justify-content: center; gap: 0.5rem; }
-  .field.checks label { color: var(--text); display: flex; gap: 0.45rem; align-items: center; }
   .layout-note { margin-top: 1.1rem; padding: 0.7rem 0.9rem; background: var(--bg-2); border-radius: 10px; color: var(--muted); font-size: 0.9rem; }
   .layout-note strong { color: var(--text); }
   .export { margin-top: 1rem; }
